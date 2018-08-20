@@ -51,4 +51,7 @@ APP_RESOURCE = './src/main/resources/application.properties'
 app = Flask(__name__)
 api = Api(app)
 
-from controller.proxy_controller import CnpqProxyController
+from controller.proxy_controller import CnpqCvController, CnpqCvsController
+
+api.add_resource(CnpqCvsController, "/cnpq/cvs", methods=["GET"])
+api.add_resource(CnpqCvController, "/cnpq/cv/<string:id>", methods=["GET"])

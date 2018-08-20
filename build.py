@@ -17,6 +17,8 @@ use_plugin('python.pycharm')
 use_plugin('python.sonarqube')
 # Used do integrate the Sphinx generate documentation
 use_plugin('python.sphinx')
+# Plugin used to copy resources of the project
+use_plugin("copy_resources")
 
 default_task = ["install_dependencies", "clean", "analyze", "publish"]
 
@@ -46,6 +48,12 @@ def initialize(project):  # initialize dependencies, project version, properties
 
     project.depends_on_requirements("requirements.txt")
     project.build_depends_on('mockito')
+
+    project.get_property("copy_resources_glob").append("src/main/resources/application.properties")
+    project.get_property("copy_resources_glob").append("runserver.sh")
+    project.set_property("copy_resources_target", "$dir_dist")
+    project.install_file("$dir_dist", "src/main/resources/application.properties")
+    project.install_file("$dir_dist", "runserver.sh")
 
 
 @task("say_hello", description='funny init task')
