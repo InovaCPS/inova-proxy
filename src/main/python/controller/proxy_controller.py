@@ -16,7 +16,7 @@ from json import dumps
 from flask_restful import Resource, abort
 
 from basic_auth import requires_auth
-from helper.xml_helper import XmlHelper
+from mapper.xml_mapper import XmlMapper
 from webapp import app
 
 
@@ -24,7 +24,7 @@ class CnpqCvsController(Resource):
 
     @requires_auth
     def get(self):
-        helper = XmlHelper()
+        helper = XmlMapper()
         curriculos = {"curriculos": []}
         set_files = glob.glob('src/main/resources/cvs/*.xml')
         if len(set_files) > 0:
@@ -50,7 +50,7 @@ class CnpqCvController(Resource):
         path = "src/main/resources/cvs/curriculo_" + id + ".xml"
         if os.path.exists(path):
             file = open(path, encoding="iso-8859-1")
-            helper = XmlHelper()
+            helper = XmlMapper()
             xml_content = file.read()
             response = app.response_class(
                 response=dumps(helper.convert_to_dict(xml_content)),

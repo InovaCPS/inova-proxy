@@ -9,12 +9,12 @@
     transform other formats to XML.
 """
 
-from xmltodict import parse
-from json import dumps
 from collections import OrderedDict
 
+from xmltodict import parse
 
-class XmlHelper:
+
+class XmlMapper:
 
     def convert_to_dict(self, xml_content):
         """Method used to convert XML to JSON format.
@@ -45,7 +45,6 @@ class XmlHelper:
         if type(iterable) in (dict, OrderedDict):
             for key in iterable.keys():
                 new_key = key.lower().replace(str_find, str_replace)
-                print(new_key + "\n")
                 if type(iterable[key]) in (dict, OrderedDict) or type(iterable[key]) is list:
                     new_iterable[new_key] = self.rename_keys_to_lower(iterable[key], str_find, str_replace)
                 else:
