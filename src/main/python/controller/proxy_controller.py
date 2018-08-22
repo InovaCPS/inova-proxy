@@ -5,8 +5,8 @@
 
 
 """
-    Controller class used to get the log registers persisted and save
-    a new log register.
+    Controller class used to get a individual CV or a lot of CVs, consuming directly of the SOAP
+    service provided by CNPq.
 """
 
 import glob
