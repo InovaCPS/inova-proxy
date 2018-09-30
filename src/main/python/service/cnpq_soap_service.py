@@ -26,9 +26,7 @@ class CnpqSoapService:
         """
             Instanciate the SoapService based in a custom WSDL.
         """
-        url = urllib.parse.urljoin('file:', urllib.request.pathname2url(
-            os.path.abspath("./src/main/resources/wsdl/WSCurriculo.xml")))
-        self.client = Client(url)
+        self.client = Client('http://servicosweb.cnpq.br/srvcurriculo/WSCurriculo?wsdl')
         self.xmlmapper = XmlMapper()
 
     def get_identificador(self, cpf):
