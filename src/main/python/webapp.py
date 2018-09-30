@@ -54,4 +54,4 @@ api = Api(app)
 from controller.proxy_controller import CnpqCvController, CnpqCvsController
 
 api.add_resource(CnpqCvsController, "/cnpq/cvs", methods=["POST"])
-api.add_resource(CnpqCvController, "/cnpq/cv/<string:id>", methods=["GET"])
+api.add_resource(CnpqCvController, "/cnpq/cv/<string:cpf>", methods=["GET"])
