@@ -13,6 +13,7 @@ import os
 import shutil
 import time
 import zipfile
+import urllib
 
 from suds.client import Client
 
@@ -25,7 +26,9 @@ class CnpqSoapService:
         """
             Instanciate the SoapService based in a custom WSDL.
         """
-        self.client = Client("src/main/resources/wsdl/WSCurriculo.xml")
+        url = urllib.parse.urljoin('file:', urllib.request.pathname2url(
+            os.path.abspath("./src/main/resources/wsdl/WSCurriculo.xml")))
+        self.client = Client(url)
         self.xmlmapper = XmlMapper()
 
     def get_identificador(self, cpf):
