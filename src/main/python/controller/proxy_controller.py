@@ -25,7 +25,7 @@ class CnpqCvsController(Resource):
     def post(self):
         cpfs = request.json['cpfs']
         for cpf in cpfs:
-            print("CPFs: " + cpfs + " - Type: " + type(cpfs))
+            print("CPFs: " + cpf + " - Type: " + type(cpf))
         cpfs = { "cpfsnew" : cpfs}
         # mapper = XmlMapper()
         # from mapper.xml_mapper import XmlMapper
