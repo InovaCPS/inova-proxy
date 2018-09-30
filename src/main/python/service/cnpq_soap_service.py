@@ -37,7 +37,7 @@ class CnpqSoapService:
         :param cpf: CPF of the instituion employee
         :return: Identifier of the instituion employee
         """
-        #self.client.set_options(headers={'SOAPAction': 'getIdentificadorCNPq', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
+        self.client.set_options(headers={'SOAPAction': 'getIdentificadorCNPq', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
         result = self.client.service.getIdentificadorCNPq(cpf,'','')
         identificador = result
         if result != None:
@@ -45,7 +45,7 @@ class CnpqSoapService:
         return identificador # Return None if the CPF to be invalid
 
     def get_data_atualizacao_cv(self, identificador):
-        #self.client.set_options(headers={'SOAPAction': 'getDataAtualizacaoCV', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
+        self.client.set_options(headers={'SOAPAction': 'getDataAtualizacaoCV', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
         result = self.client.service.getDataAtualizacaoCV(identificador)
         return "".join( chr(x) for x in result.encode('utf-8'))
 
@@ -55,7 +55,7 @@ class CnpqSoapService:
         :param identificador: Identifier of the instituion employee
         :return: CV in XML format
         """
-        #self.client.set_options(headers={'SOAPAction': 'getCurriculoCompactado', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
+        self.client.set_options(headers={'SOAPAction': 'getCurriculoCompactado', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
         result = self.client.service.getCurriculoCompactado(identificador)
         # Decodifica o conteudo em Base64 e escreve em um arquivo local com nome do identificador.xml
         zipfilename = identificador + "-" + str(int(time.time()))
