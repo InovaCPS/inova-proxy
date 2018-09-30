@@ -9,7 +9,6 @@
     service provided by CNPq.
 """
 
-import glob
 from json import dumps
 
 from flask import request
@@ -23,9 +22,11 @@ from webapp import app
 class CnpqCvsController(Resource):
 
     @requires_auth
-    def get(self):
+    def post(self):
         cpfs = request.json['cpfs']
-        print("CPFs: " + cpfs + " - Type: " + type(cpfs))
+        for cpf in cpfs:
+            print("CPFs: " + cpfs + " - Type: " + type(cpfs))
+        cpfs = { "cpfsnew" : cpfs}
         # mapper = XmlMapper()
         # from mapper.xml_mapper import XmlMapper
         # curriculos = {"curriculos": []}
@@ -50,6 +51,7 @@ class CnpqCvController(Resource):
 
     @requires_auth
     def get(self, cpf=None):
+        response = None
         if cpf is not None:
             service = CnpqSoapService()
             xml_content = service.get_cv(cpf)
