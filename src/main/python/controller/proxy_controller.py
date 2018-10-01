@@ -29,7 +29,9 @@ class CnpqCvsController(Resource):
     def post(self):
         response = None
         curriculos = []
-        cpfs = request.json['cpfs']
+        cpfs = list(set(request.json['cpfs']))
+        if len(cpfs) > 5:
+            cpfs = cpfs[:5]
         for cpf in cpfs:
             xml_content = self.service.get_cv(cpf)
             if xml_content is not None:
