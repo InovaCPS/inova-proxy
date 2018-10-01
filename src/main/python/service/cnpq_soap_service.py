@@ -81,7 +81,7 @@ class CnpqSoapService:
         if cv['identificador'] is not None:
             cv['data_atualizacao'] = self.get_data_atualizacao_cv(cv['identificador'])
             grossxml = self.get_cv_lattes(cv['identificador'])
-            cv['data'] = self.xmlmapper.convert_to_dict(grossxml)
+            cv.update(self.xmlmapper.convert_to_dict(grossxml))
         else:
             cv = None
         return cv

@@ -21,40 +21,40 @@ from webapp import app
 
 class CnpqCvsController(Resource):
 
+    def __init__(self):
+        super().__init__()
+        self.service = CnpqSoapService()
+
     @requires_auth
     def post(self):
+        curriculos = []
         cpfs = request.json['cpfs']
         for cpf in cpfs:
-            print("CPFs: " + cpf)
-        cpfs = { "cpfsnew" : cpfs}
-        # mapper = XmlMapper()
-        # from mapper.xml_mapper import XmlMapper
-        # curriculos = {"curriculos": []}
-        # set_files = glob.glob('src/main/resources/cvs/*.xml')
-        # if len(set_files) > 0:
-        #     for nfile in set_files:
-        #         file = open(nfile, encoding="iso-8859-1")
-        #         xml_content = file.read()
-        #         curriculos["curriculos"].append(mapper.convert_to_dict(xml_content))
-        #     response = app.response_class(
-        #         response=dumps(curriculos),
-        #         status=200,
-        #         mimetype='application/json'
-        #     )
-        # else:
-        #     abort(404, message='No curriculum found')
-        response = app.response_class(dumps(cpfs), status=200, mimetype='application/json')
+            xml_content = self.service.get_cv(cpf)
+            if xml_content is not None:
+                curriculos.append(xml_content)
+        if len(curriculos) > 0:
+            response = app.response_class(
+                response=dumps({"curriculos": curriculos}),
+                status=200,
+                mimetype='application/json'
+            )
+        else:
+            abort(404, message='No curriculum found to the CPFs informed')
         return response
 
 
 class CnpqCvController(Resource):
 
+    def __init__(self):
+        super().__init__()
+        self.service = CnpqSoapService()
+
     @requires_auth
     def get(self, cpf=None):
         response = None
         if cpf is not None:
-            service = CnpqSoapService()
-            xml_content = service.get_cv(cpf)
+            xml_content = self.service.get_cv(cpf)
             if xml_content is not None:
                 response = app.response_class(
                     response=dumps(xml_content),
