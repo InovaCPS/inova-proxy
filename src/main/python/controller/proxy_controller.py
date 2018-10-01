@@ -27,6 +27,7 @@ class CnpqCvsController(Resource):
 
     @requires_auth
     def post(self):
+        response = None
         curriculos = []
         cpfs = request.json['cpfs']
         for cpf in cpfs:
