@@ -16,7 +16,7 @@ from flask_restful import Resource, abort
 
 from basic_auth import requires_auth
 from service.cnpq_soap_service import CnpqSoapService
-from webapp import app
+from webapp import app, api
 
 
 class CnpqCvsController(Resource):
@@ -26,20 +26,23 @@ class CnpqCvsController(Resource):
         self.service = CnpqSoapService()
 
     @requires_auth
+    @api.representation('application/json')
     def post(self):
         response = None
         curriculos = []
         cpfs = list(set(request.json['cpfs']))
         if len(cpfs) > 5:
-            cpfs = cpfs[:5]
+            cpfs = [cpf for cpf in cpfs[:5] if cpf is not None]
         for cpf in cpfs:
-            xml_content = self.service.get_cv(cpf)
-            if xml_content is not None:
-                curriculos.append(xml_content)
+            json_content = self.service.get_cv(cpf)
+            if json_content is not None:
+                curriculos.append(json_content)
+            else:
+                curriculos.append(dict(cpf=cpf, message='No curriculum found to the CPF informed'))
         if len(curriculos) > 0:
             response = app.response_class(
                 response=dumps({"curriculos": curriculos}),
-                status=200,
+                status=201,
                 mimetype='application/json'
             )
         else:
@@ -54,6 +57,7 @@ class CnpqCvController(Resource):
         self.service = CnpqSoapService()
 
     @requires_auth
+    @api.representation('application/json')
     def get(self, cpf=None):
         response = None
         if cpf is not None:

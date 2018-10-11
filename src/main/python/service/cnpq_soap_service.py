@@ -13,11 +13,9 @@ import os
 import shutil
 import time
 import zipfile
-import urllib
-
-from suds.client import Client
 
 from mapper.xml_mapper import XmlMapper
+from suds.client import Client
 
 
 class CnpqSoapService:
@@ -38,14 +36,17 @@ class CnpqSoapService:
         self.client.set_options(headers={'SOAPAction': 'getIdentificadorCNPq', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
         result = self.client.service.getIdentificadorCNPq(cpf,'','')
         identificador = result
-        if result != None:
+        if result is not None:
             identificador = "".join( chr(x) for x in result.encode('utf-8'))
         return identificador # Return None if the CPF to be invalid
 
     def get_data_atualizacao_cv(self, identificador):
         self.client.set_options(headers={'SOAPAction': 'getDataAtualizacaoCV', 'Content-Type' : 'text/xml; charset=ISO-8859-1'})
         result = self.client.service.getDataAtualizacaoCV(identificador)
-        return "".join( chr(x) for x in result.encode('utf-8'))
+        if result is not None:
+            return "".join( chr(x) for x in result.encode('utf-8'))
+        else:
+            return None
 
     def get_cv_lattes(self, identificador):
         """
@@ -75,13 +76,14 @@ class CnpqSoapService:
         return xmlcv.encode('iso-8859-1')
 
     def get_cv(self, cpf):
-        cv = {}
-        cv['cpf'] = cpf
-        cv['identificador'] = self.get_identificador(cpf)
+        cv = {'cpf': cpf, 'identificador': self.get_identificador(cpf)}
         if cv['identificador'] is not None:
             cv['data_atualizacao'] = self.get_data_atualizacao_cv(cv['identificador'])
-            grossxml = self.get_cv_lattes(cv['identificador'])
-            cv.update(self.xmlmapper.convert_to_dict(grossxml))
+            if cv['data_atualizacao'] is not None:
+                grossxml = self.get_cv_lattes(cv['identificador'])
+                cv.update(self.xmlmapper.convert_to_dict(grossxml))
+            else:
+                cv = None
         else:
             cv = None
         return cv
