@@ -14,8 +14,9 @@ import shutil
 import time
 import zipfile
 
-from mapper.xml_mapper import XmlMapper
 from suds.client import Client
+
+from mapper.xml_mapper import XmlMapper
 
 
 class CnpqSoapService:
@@ -75,7 +76,7 @@ class CnpqSoapService:
             shutil.rmtree(basedirpath + zipfilename)
         return xmlcv.encode('iso-8859-1')
 
-    def get_cv(self, cpf):
+    def get_json_cv(self, cpf):
         cv = {'cpf': cpf, 'identificador': self.get_identificador(cpf)}
         if cv['identificador'] is not None:
             cv['data_atualizacao'] = self.get_data_atualizacao_cv(cv['identificador'])
@@ -86,4 +87,11 @@ class CnpqSoapService:
                 cv = None
         else:
             cv = None
+        return cv
+
+    def get_xml_cv(self, cpf):
+        cv = None
+        identificador = self.get_identificador(cpf)
+        if identificador is not None:
+            cv = self.get_cv_lattes(identificador)
         return cv

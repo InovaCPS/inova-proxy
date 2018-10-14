@@ -16,7 +16,7 @@ from flask_restful import Resource, abort
 
 from basic_auth import requires_auth
 from service.cnpq_soap_service import CnpqSoapService
-from webapp import app, api
+from webapp import app
 
 
 class CnpqCvsController(Resource):
@@ -26,7 +26,6 @@ class CnpqCvsController(Resource):
         self.service = CnpqSoapService()
 
     @requires_auth
-    @api.representation('application/json')
     def post(self):
         response = None
         curriculos = []
@@ -34,7 +33,7 @@ class CnpqCvsController(Resource):
         if len(cpfs) > 5:
             cpfs = [cpf for cpf in cpfs[:5] if cpf is not None]
         for cpf in cpfs:
-            json_content = self.service.get_cv(cpf)
+            json_content = self.service.get_json_cv(cpf)
             if json_content is not None:
                 curriculos.append(json_content)
             else:
@@ -57,19 +56,26 @@ class CnpqCvController(Resource):
         self.service = CnpqSoapService()
 
     @requires_auth
-    @api.representation('application/json')
     def get(self, cpf=None):
+        content_type = request.mimetype
         response = None
         if cpf is not None:
-            xml_content = self.service.get_cv(cpf)
+            xml_content = None
+            if content_type == 'application/json':
+                xml_content = self.service.get_json_cv(cpf)
+                xml_content = dumps(xml_content)
+            elif content_type == 'application/xml':
+                xml_content = self.service.get_xml_cv(cpf)
+            # Verify if the header content-type is JSON or XML
             if xml_content is not None:
                 response = app.response_class(
-                    response=dumps(xml_content),
+                    response=xml_content,
                     status=200,
-                    mimetype='application/json'
+                    mimetype=content_type
                 )
             else:
-                abort(404, message='No curriculum found to the CPF informed')
+                abort(404, message='No curriculum found to the CPF informed or invalid mimetype')
+
         else:
             abort(412, message='No valid CPF value informed')
         return response
