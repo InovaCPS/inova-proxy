@@ -60,12 +60,11 @@ class CnpqCvController(Resource):
         content_type = request.mimetype
         response = None
         if cpf is not None:
-            xml_content = None
-            if content_type == 'application/json':
+            if content_type == 'application/xml':
+                xml_content = self.service.get_xml_cv(cpf)
+            else:
                 xml_content = self.service.get_json_cv(cpf)
                 xml_content = dumps(xml_content)
-            elif content_type == 'application/xml':
-                xml_content = self.service.get_xml_cv(cpf)
             # Verify if the header content-type is JSON or XML
             if xml_content is not None:
                 response = app.response_class(
