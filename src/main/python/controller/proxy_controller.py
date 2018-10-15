@@ -78,3 +78,32 @@ class CnpqCvController(Resource):
         else:
             abort(412, message='No valid CPF value informed')
         return response
+
+
+class CnpqUpdateDateController(Resource):
+
+    def __init__(self):
+        super().__init__()
+        self.service = CnpqSoapService()
+
+    @requires_auth
+    def get(self, cpf=None):
+        response = {'cpf': cpf}
+        if cpf is not None:
+            identificador = self.service.get_identificador(cpf)
+            if identificador is not None:
+                response['identificador'] = identificador
+                date = self.service.get_data_atualizacao_cv(identificador)
+                if date is not None:
+                    response['data_atualizacao'] = date
+                    response = app.response_class(
+                        response=response,
+                        status=200,
+                        mimetype='application/json'
+                    )
+                else:
+                    abort(404, message='No update date found to the CPF informed')
+
+        else:
+            abort(412, message='No valid CPF value informed')
+        return response

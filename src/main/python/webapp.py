@@ -51,7 +51,8 @@ APP_RESOURCE = './src/main/resources/application.properties'
 app = Flask(__name__)
 api = Api(app)
 
-from controller.proxy_controller import CnpqCvController, CnpqCvsController
+from controller.proxy_controller import CnpqCvController, CnpqCvsController, CnpqUpdateDateController
 
 api.add_resource(CnpqCvsController, "/cpsinova/cnpq/cvs", methods=["POST"])
 api.add_resource(CnpqCvController, "/cpsinova/cnpq/cv/<string:cpf>", methods=["GET"])
+api.add_resource(CnpqUpdateDateController, "/cpsinova/cnpq/cv/update/<string:cpf>", methods=["GET"])
