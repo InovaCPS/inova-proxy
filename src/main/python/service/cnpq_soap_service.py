@@ -74,7 +74,7 @@ class CnpqSoapService:
         xmlin.close()
         if os.path.exists(zipfilename):
             shutil.rmtree(basedirpath + zipfilename)
-        return xmlcv.decode('iso-8859-1').encode('utf-8')
+        return bytearray(xmlcv, 'iso-8859-1').decode('utf-8')
 
     def get_json_cv(self, cpf):
         cv = {'cpf': cpf, 'identificador': self.get_identificador(cpf)}
