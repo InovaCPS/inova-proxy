@@ -97,7 +97,7 @@ class CnpqUpdateDateController(Resource):
                 if date is not None:
                     response['data_atualizacao'] = date
                     response = app.response_class(
-                        response=response,
+                        response=dumps(response),
                         status=200,
                         mimetype='application/json'
                     )
