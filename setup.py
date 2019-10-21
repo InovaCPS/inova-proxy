@@ -72,7 +72,7 @@ if __name__ == '__main__':
             'twine==1.11.0',
             'unittest-xml-reporting==2.2.0',
             'urllib3==1.23',
-            'Werkzeug==0.14.1'
+            'Werkzeug==0.15.3'
         ],
         dependency_links = [],
         zip_safe = True,
