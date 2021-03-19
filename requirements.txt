@@ -17,7 +17,7 @@ idna==2.7
 imagesize==1.0.0
 isodate==0.6.0
 itsdangerous==0.24
-Jinja2==2.10
+Jinja2==2.11.3
 lxml==3.7.3
 MarkupSafe==1.0
 mccabe==0.6.1
