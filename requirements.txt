@@ -18,7 +18,7 @@ imagesize==1.0.0
 isodate==0.6.0
 itsdangerous==0.24
 Jinja2==2.10
-lxml==3.7.3
+lxml==4.6.5
 MarkupSafe==1.0
 mccabe==0.6.1
 mockito==1.1.0
